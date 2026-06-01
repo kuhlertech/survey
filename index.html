@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบประเมินความพึงพอใจ RefComp Smart Blue Technology</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: linear-gradient(160deg, #4A90C4 0%, #5BAAD8 40%, #6BBDE8 70%, #82CCEF 100%);
+    min-height: 100vh;
+  }
+
+  /* ซ่อน banner Apps Script */
+  body > div:not(#wrap) { display: none !important; }
+
+  #wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 0 40px;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .top-header {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    padding: 18px 20px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 16px;
+  }
+  .top-logo {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .top-logo .material-icons { color: #fff; font-size: 26px; }
+  .top-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.45; }
+  .top-sub { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 3px; }
+
+  /* Progress */
+  .prog-wrap {
+    margin: 0 16px 16px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  .prog-top { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 12px; color: #fff; font-weight: 600; }
+  .prog-track { height: 7px; background: rgba(255,255,255,0.25); border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; background: #fff; border-radius: 99px; transition: width .4s; }
+
+  /* Section card */
+  .sec-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 18px 14px;
+    margin: 0 16px 12px;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.08);
+  }
+  .sec-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #EBF5FF; color: #2c6fa8;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 12px; border-radius: 99px;
+    margin-bottom: 8px; border: 1px solid #bee3f8;
+  }
+  .sec-title { font-size: 17px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+  .sec-sub { font-size: 12px; color: #777; }
+
+  /* Question block */
+  .q-block {
+    background: #fff;
+    border: 1.5px solid #e8f0fe;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    margin: 0 16px 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+  }
+  .q-num { font-size: 11px; font-weight: 700; color: #4A90C4; margin-bottom: 6px; }
+  .q-text { font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 14px; line-height: 1.6; }
+
+  /* Star */
+  .star-row { display: flex; justify-content: center; gap: 8px; }
+  .star-btn {
+    width: 52px; height: 52px;
+    border: 1.5px solid #ddd; border-radius: 12px;
+    background: #f8f9fa; cursor: pointer; font-size: 26px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; color: #ccc;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .star-btn.on { background: #FFF8E1; border-color: #FFB300; color: #FFB300; }
+  .star-labels { display: flex; justify-content: space-between; margin-top: 7px; font-size: 11px; color: #aaa; padding: 0 4px; }
+  .star-picked { font-size: 13px; color: #4A90C4; font-weight: 700; margin-top: 6px; }
+
+  /* Radio */
+  .radio-list { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+  .radio-btn {
+    padding: 13px 16px;
+    border: 1.5px solid #e0e0e0; border-radius: 12px;
+    background: #f8f9fa; cursor: pointer;
+    font-size: 15px; font-weight: 500; color: #333;
+    text-align: left; transition: all .15s;
+    font-family: 'Sarabun', sans-serif;
+    display: flex; align-items: center; gap: 11px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .radio-btn::before {
+    content: ''; width: 19px; height: 19px; border-radius: 50%;
+    border: 2px solid #ccc; flex-shrink: 0; transition: all .15s;
+  }
+  .radio-btn.on { border-color: #4A90C4; background: #EBF5FF; color: #1a1a1a; font-weight: 700; }
+  .radio-btn.on::before { background: #4A90C4; border-color: #4A90C4; box-shadow: inset 0 0 0 3px #fff; }
+
+  .sub-label { margin-top: 12px; margin-bottom: 6px; font-size: 13px; color: #555; font-weight: 500; text-align: left; }
+  .sub-input {
+    width: 100%; border: 1.5px solid #ddd; border-radius: 10px; padding: 11px 14px;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; color: #1a1a1a;
+    background: #f8f9fa; outline: none;
+  }
+  .sub-input:focus { border-color: #4A90C4; background: #fff; }
+
+  textarea.gi {
+    width: 100%; border: 1.5px solid #ddd; border-radius: 10px; padding: 11px 14px;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; color: #1a1a1a;
+    background: #f8f9fa; resize: vertical; min-height: 90px; outline: none;
+    text-align: left;
+  }
+  textarea.gi:focus { border-color: #4A90C4; background: #fff; }
+
+  /* Nav row */
+  .nav-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 16px 0; gap: 10px;
+  }
+  .btn-back {
+    display: flex; align-items: center; gap: 5px;
+    padding: 12px 20px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 12px; background: rgba(255,255,255,0.2);
+    cursor: pointer; font-size: 14px; font-weight: 600; color: #fff;
+    font-family: 'Sarabun', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .step-info { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 600; }
+  .btn-next {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 22px;
+    border: none; border-radius: 12px;
+    background: rgba(255,255,255,0.92);
+    cursor: pointer; font-size: 14px; font-weight: 700; color: #2c6fa8;
+    font-family: 'Sarabun', sans-serif;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-next:disabled { opacity: .35; cursor: not-allowed; }
+  .err-msg { text-align: center; color: #c62828; font-size: 13px; padding: 8px 16px 0; min-height: 20px; }
+
+  /* Step dots */
+  .step-dots { display: flex; justify-content: center; gap: 6px; padding: 14px 0 4px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.35); transition: all .3s;
+  }
+  .dot.active { background: #fff; width: 22px; border-radius: 4px; }
+  .dot.done { background: rgba(255,255,255,0.7); }
+
+  /* Result */
+  .result-card {
+    background: #fff; border-radius: 20px; padding: 28px 20px;
+    margin: 0 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .check-circle {
+    width: 76px; height: 76px; border-radius: 50%; background: #4CAF50;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; box-shadow: 0 4px 16px rgba(76,175,80,0.35);
+  }
+  .check-circle .material-icons { font-size: 42px; color: #fff; }
+  .result-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; line-height: 1.4; }
+  .result-sub { font-size: 13px; color: #777; margin-bottom: 22px; line-height: 1.6; }
+  .sum-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; text-align: left; }
+  .sum-item { background: #f5faff; border: 1px solid #bee3f8; border-radius: 10px; padding: 11px 13px; }
+  .sum-lbl { font-size: 11px; color: #888; margin-bottom: 3px; }
+  .sum-val { font-size: 15px; font-weight: 700; color: #2c6fa8; }
+  .sum-item.hl { grid-column: 1/-1; background: #EBF5FF; border-color: #4A90C4; }
+  .sum-item.hl .sum-lbl { color: #4A90C4; }
+  .sum-item.hl .sum-val { font-size: 20px; color: #1a1a1a; }
+  .btn-restart {
+    padding: 12px 30px; border: 1.5px solid #4A90C4;
+    border-radius: 12px; background: #fff;
+    cursor: pointer; font-size: 14px; font-weight: 700; color: #4A90C4;
+    font-family: 'Sarabun', sans-serif;
+  }
+
+  @media (min-width: 600px) {
+    .star-btn { width: 56px; height: 56px; font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <!-- Header -->
+  <div class="top-header">
+    <div class="top-logo"><span class="material-icons">assessment</span></div>
+    <div class="top-title">แบบประเมินความพึงพอใจ<br>การจัดงานสัมมนา RefComp Smart Blue Technology</div>
+    <div class="top-sub">กรุณาตอบคำถามให้ครบทุกข้อ</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-top">
+      <span>ความคืบหน้า</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Step dots -->
+  <div class="step-dots" id="dots"></div>
+
+  <!-- App -->
+  <div id="app"></div>
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbt1fSLgKhXSC4rO64J9sFn8RbeWAOMDMsevPInIRfMoa1uc9yx_t_gaekjTvD_VL5Ng/exec';
+const SL = ['','น้อยที่สุด','น้อย','ปานกลาง','มาก','มากที่สุด'];
+
+const SECS = [
+  { num:'ส่วนที่ 1', title:'การจัดงานโดยรวม', icon:'event_available',
+    sub:'ประเมินความพึงพอใจ (1 = น้อยที่สุด, 5 = มากที่สุด)',
+    qs:[
+      {id:'q1_1',num:'1.1',text:'ความสะดวกในการลงทะเบียนเพื่อเข้าร่วมงานสัมมนา',type:'star'},
+      {id:'q1_2',num:'1.2',text:'ความชัดเจนของกำหนดการ',type:'star'},
+      {id:'q1_3',num:'1.3',text:'ระยะเวลาในการจัดสัมมนา',type:'star'},
+      {id:'q1_4',num:'1.4',text:'การดูแล/ต้อนรับของผู้จัดงานสัมมนา',type:'star'},
+    ]
+  },
+  { num:'ส่วนที่ 2', title:'สถานที่จัดงาน', icon:'location_on',
+    sub:'ประเมินความพึงพอใจ (1 = น้อยที่สุด, 5 = มากที่สุด)',
+    qs:[
+      {id:'q2_1',num:'2.1',text:'ความสะดวกในการเดินทางมายังสถานที่จัดงาน',type:'star'},
+      {id:'q2_2',num:'2.2',text:'ความเหมาะสมของสถานที่ (ขนาดห้อง / บรรยากาศ / สิ่งอำนวยความสะดวก)',type:'star'},
+      {id:'q2_3',num:'2.3',text:'ความเหมาะสมของอาหารและเครื่องดื่ม',type:'star'},
+      {id:'q2_4',num:'2.4',text:'ความสะอาดและความปลอดภัยของสถานที่',type:'star'},
+    ]
+  },
+  { num:'ส่วนที่ 3', title:'วิทยากรและเนื้อหา', icon:'school',
+    sub:'ประเมินความพึงพอใจ (1 = น้อยที่สุด, 5 = มากที่สุด)',
+    qs:[
+      {id:'q3_1',num:'3.1',text:'ความรู้ ความสามารถของวิทยากร',type:'star'},
+      {id:'q3_2',num:'3.2',text:'ความน่าสนใจของเนื้อหา',type:'star'},
+      {id:'q3_3',num:'3.3',text:'ประโยชน์ที่ได้รับจากการเข้าร่วมสัมมนา',type:'star'},
+      {id:'q3_4',num:'3.4',text:'การเปิดโอกาสให้ซักถาม / แลกเปลี่ยนความคิดเห็น',type:'star'},
+    ]
+  },
+  { num:'ส่วนที่ 4', title:'ภาพรวมของงานสัมมนา', icon:'stars',
+    sub:'ประเมินความพึงพอใจ (1 = น้อยที่สุด, 5 = มากที่สุด)',
+    qs:[
+      {id:'q4_1',num:'4.1',text:'งานสัมมนาครั้งนี้ตอบโจทย์ความคาดหวังของท่าน',type:'star'},
+      {id:'q4_2',num:'4.2',text:'บรรยากาศของงานสัมมนา',type:'star'},
+    ]
+  },
+  { num:'ส่วนที่ 5', title:'ข้อเสนอแนะ', icon:'chat_bubble_outline',
+    sub:'ความประสงค์และข้อเสนอแนะเพิ่มเติม',
+    qs:[
+      {id:'q5_1',num:'5.1',text:'ท่านมีความประสงค์อยากให้บริษัทฯ จัดสัมมนาอีกหรือไม่',
+        type:'radio_text',choices:['ไม่มีความประสงค์','มีความประสงค์'],
+        subId:'q5_1_detail',subTrigger:'มีความประสงค์',
+        subLabel:'กรุณาระบุประเภทสินค้าที่สนใจให้จัดสัมมนาครั้งถัดไป'},
+      {id:'q5_2',num:'5.2',text:'ความคิดเห็นเพิ่มเติม / ข้อเสนอแนะ',type:'text'},
+    ]
+  }
+];
+
+let step=0, A={}, sending=false, done=[false,false,false,false,false];
+
+function updateProgress(){
+  const pct = step>=SECS.length ? 100 : Math.round(step/SECS.length*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-pct').textContent = pct+'%';
+  // dots
+  let d='';
+  for(let i=0;i<SECS.length;i++){
+    let cls='dot';
+    if(i===step) cls+=' active';
+    else if(done[i]) cls+=' done';
+    d+=`<div class="${cls}"></div>`;
+  }
+  document.getElementById('dots').innerHTML=d;
+}
+
+function ok(){
+  for(const q of SECS[step].qs){
+    if(q.type==='star'&&!A[q.id]) return false;
+    if(q.type==='radio_text'&&!A[q.id]) return false;
+  }
+  return true;
+}
+
+function ss(id,v){ A[id]=v; renderNoScroll(); }
+function sr(id,v){ A[id]=v; renderNoScroll(); }
+function st(id,v){ A[id]=v; }
+
+function rStar(q){
+  const v=A[q.id]||0;
+  let h='<div class="star-row">';
+  for(let i=1;i<=5;i++) h+=`<button class="star-btn ${v>=i?'on':''}" onclick="ss('${q.id}',${i})">${v>=i?'★':'☆'}</button>`;
+  h+='</div><div class="star-labels"><span>1 = น้อยที่สุด</span><span>5 = มากที่สุด</span></div>';
+  if(v) h+=`<div class="star-picked">★ ${SL[v]}</div>`;
+  return h;
+}
+
+function rRadio(q){
+  let h='<div class="radio-list">';
+  for(const c of q.choices) h+=`<button class="radio-btn ${A[q.id]===c?'on':''}" onclick="sr('${q.id}','${c}')">${c}</button>`;
+  h+='</div>';
+  if(A[q.id]===q.subTrigger){
+    h+=`<div class="sub-label">${q.subLabel}</div>`;
+    h+=`<input class="sub-input" type="text" placeholder="ระบุประเภทสินค้า..." value="${A[q.subId]||''}" oninput="st('${q.subId}',this.value)">`;
+  }
+  return h;
+}
+
+function rText(q){
+  return `<textarea class="gi" placeholder="พิมพ์ข้อเสนอแนะที่นี่..." oninput="st('${q.id}',this.value)">${A[q.id]||''}</textarea>`;
+}
+
+function avg(ids){
+  const v=ids.map(i=>A[i]).filter(Boolean);
+  return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'-';
+}
+
+async function submit(){
+  if(sending)return;
+  sending=true; render();
+  try{
+    const payload = {timestamp:new Date().toLocaleString('th-TH'),...A};
+    // ใช้ form submission เพื่อข้าม CORS
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = SCRIPT_URL;
+    form.target = 'hidden_iframe';
+    form.style.display = 'none';
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+    // สร้าง iframe ซ่อน
+    let iframe = document.getElementById('hidden_iframe');
+    if(!iframe){
+      iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe';
+      iframe.id = 'hidden_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    // รอให้ส่งเสร็จ
+    await new Promise(r => setTimeout(r, 2000));
+    done[step]=true; step=99;
+  }catch(e){
+    const el=document.getElementById('err');
+    if(el) el.textContent='เกิดข้อผิดพลาด กรุณาลองใหม่';
+  }
+  sending=false; render();
+}
+
+function rResult(){
+  const a1=avg(['q1_1','q1_2','q1_3','q1_4']), a2=avg(['q2_1','q2_2','q2_3','q2_4']);
+  const a3=avg(['q3_1','q3_2','q3_3','q3_4']), a4=avg(['q4_1','q4_2']);
+  const all=['q1_1','q1_2','q1_3','q1_4','q2_1','q2_2','q2_3','q2_4','q3_1','q3_2','q3_3','q3_4','q4_1','q4_2'].map(i=>A[i]).filter(Boolean);
+  const ov=all.length?(all.reduce((a,b)=>a+b,0)/all.length).toFixed(1):'-';
+  document.getElementById('dots').innerHTML='';
+  return `<div class="result-card">
+    <div class="check-circle"><span class="material-icons">check</span></div>
+    <div class="result-title">ขอขอบพระคุณในการตอบแบบสอบถาม</div>
+    <div class="result-sub">เพื่อการพัฒนาการจัดสัมมนาครั้งต่อไป<br>ข้อมูลของท่านถูกบันทึกเรียบร้อยแล้ว</div>
+    <div class="sum-grid">
+      <div class="sum-item"><div class="sum-lbl">ส่วนที่ 1 การจัดงาน</div><div class="sum-val">★ ${a1}/5</div></div>
+      <div class="sum-item"><div class="sum-lbl">ส่วนที่ 2 สถานที่</div><div class="sum-val">★ ${a2}/5</div></div>
+      <div class="sum-item"><div class="sum-lbl">ส่วนที่ 3 วิทยากร</div><div class="sum-val">★ ${a3}/5</div></div>
+      <div class="sum-item"><div class="sum-lbl">ส่วนที่ 4 ภาพรวม</div><div class="sum-val">★ ${a4}/5</div></div>
+      <div class="sum-item hl"><div class="sum-lbl">คะแนนเฉลี่ยรวม</div><div class="sum-val">★ ${ov} / 5</div></div>
+      ${A['q5_1']?`<div class="sum-item"><div class="sum-lbl">ความประสงค์ครั้งถัดไป</div><div class="sum-val" style="font-size:13px;">${A['q5_1']}</div></div>`:''}
+      ${A['q5_1_detail']?`<div class="sum-item"><div class="sum-lbl">ประเภทสินค้า</div><div class="sum-val" style="font-size:13px;">${A['q5_1_detail']}</div></div>`:''}
+      ${A['q5_2']?`<div class="sum-item" style="grid-column:1/-1"><div class="sum-lbl">ข้อเสนอแนะ</div><div class="sum-val" style="font-size:13px;font-weight:500;color:#333;">${A['q5_2']}</div></div>`:''}
+    </div>
+    <button class="btn-restart" onclick="restart()">ทำแบบสอบถามใหม่</button>
+  </div>`;
+}
+
+function restart(){ step=0; A={}; sending=false; done=[false,false,false,false,false]; render(); }
+
+function render(){
+  updateProgress();
+  const app=document.getElementById('app');
+  if(step===99){ app.innerHTML=rResult(); return; }
+  const sec=SECS[step], isLast=step===SECS.length-1;
+  let html=`<div class="sec-card">
+    <div class="sec-badge"><span class="material-icons" style="font-size:13px;">${sec.icon}</span> ${sec.num}</div>
+    <div class="sec-title">${sec.title}</div>
+    <div class="sec-sub">${sec.sub}</div>
+  </div>`;
+  for(const q of sec.qs){
+    html+=`<div class="q-block"><div class="q-num">${q.num}</div><div class="q-text">${q.text}</div>`;
+    if(q.type==='star') html+=rStar(q);
+    else if(q.type==='radio_text') html+=rRadio(q);
+    else html+=rText(q);
+    html+='</div>';
+  }
+  html+=`<div class="nav-row">
+    <button class="btn-back" onclick="goBack()" style="${step===0?'visibility:hidden':''}">
+      <span class="material-icons" style="font-size:17px;">arrow_back</span> ย้อนกลับ
+    </button>
+    <span class="step-info">${step+1} / ${SECS.length}</span>
+    <button class="btn-next" onclick="${isLast?'submit()':'goNext()'}" ${ok()&&!sending?'':'disabled'}>
+      ${sending?'กำลังส่ง...':isLast?'ส่งแบบสอบถาม':'ถัดไป'}
+      <span class="material-icons" style="font-size:17px;">${sending?'hourglass_empty':isLast?'send':'arrow_forward'}</span>
+    </button>
+  </div>
+  <div id="err" class="err-msg"></div>`;
+  app.innerHTML=html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goNext(){ if(ok()&&step<SECS.length-1){ done[step]=true; step++; render(); } }
+function goBack(){ if(step>0){ step--; render(); } }
+
+function renderNoScroll(){
+  updateProgress();
+  const app=document.getElementById('app');
+  if(step===99){ app.innerHTML=rResult(); return; }
+  const sec=SECS[step], isLast=step===SECS.length-1;
+  let html=`<div class="sec-card">
+    <div class="sec-badge"><span class="material-icons" style="font-size:13px;">${sec.icon}</span> ${sec.num}</div>
+    <div class="sec-title">${sec.title}</div>
+    <div class="sec-sub">${sec.sub}</div>
+  </div>`;
+  for(const q of sec.qs){
+    html+=`<div class="q-block"><div class="q-num">${q.num}</div><div class="q-text">${q.text}</div>`;
+    if(q.type==='star') html+=rStar(q);
+    else if(q.type==='radio_text') html+=rRadio(q);
+    else html+=rText(q);
+    html+='</div>';
+  }
+  html+=`<div class="nav-row">
+    <button class="btn-back" onclick="goBack()" style="${step===0?'visibility:hidden':''}">
+      <span class="material-icons" style="font-size:17px;">arrow_back</span> ย้อนกลับ
+    </button>
+    <span class="step-info">${step+1} / ${SECS.length}</span>
+    <button class="btn-next" onclick="${isLast?'submit()':'goNext()'}" ${ok()&&!sending?'':'disabled'}>
+      ${sending?'กำลังส่ง...':isLast?'ส่งแบบสอบถาม':'ถัดไป'}
+      <span class="material-icons" style="font-size:17px;">${sending?'hourglass_empty':isLast?'send':'arrow_forward'}</span>
+    </button>
+  </div>
+  <div id="err" class="err-msg"></div>`;
+  app.innerHTML=html;
+}
+
+render();
+</script>
+</body>
+</html>
